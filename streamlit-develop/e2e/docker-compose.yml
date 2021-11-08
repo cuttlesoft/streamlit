@@ -1,0 +1,29 @@
+version: "3.7"
+services:
+  streamlit_e2e_tests:
+    image: streamlit_e2e_tests
+    ipc: host
+    build:
+      context: ..
+      dockerfile: ./e2e/Dockerfile
+
+    volumes:
+      - .:/home/circleci/repo/e2e
+      - ../component-template:/home/circleci/repo/component-template
+      - ../frontend/cypress:/home/circleci/repo/frontend/cypress
+      - ../frontend/src:/home/circleci/repo/frontend/src
+      - ../frontend/test_results:/home/circleci/repo/frontend/test_results
+      - ../lib/streamlit:/home/circleci/repo/lib/streamlit
+      - ../scripts:/home/circleci/repo/scripts
+
+      - type: volume
+        source: hard_source_webpack_plugin_cache
+        target: /home/circleci/repo/frontend/node_modules/.cache/hard-source
+        volume:
+          nocopy: true
+
+volumes:
+  hard_source_webpack_plugin_cache:
+# TODO
+# multi stage builds
+# update image and container names
