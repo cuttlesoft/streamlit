@@ -247,10 +247,14 @@ jobs:
       # CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     working_directory: ~/repo
     steps:
-      - run: echo "Release version ${STREAMLIT_RELEASE_VERSION}"
       - checkout:
           name: Checkout Streamlit code
-      - run: echo "Done with checkout"
+      - run: echo "Done with checkout
+      - update_version: 
+          name: Update streamlit version 
+          command: |
+            echo "Release version ${STREAMLIT_RELEASE_VERSION}"
+            python scripts/update_version.py $STREAMLIT_RELEASE_VERSION
       # - run: echo $CIRCLE_COMPARE_URL
 
 
