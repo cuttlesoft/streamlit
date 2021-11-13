@@ -255,6 +255,7 @@ jobs:
           command: |
             echo "Release version ${STREAMLIT_RELEASE_VERSION}"
             python scripts/update_version.py $STREAMLIT_RELEASE_VERSION
+            make package
       # - run: echo $CIRCLE_COMPARE_URL
 
 
