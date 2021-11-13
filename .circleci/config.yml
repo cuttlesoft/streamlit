@@ -250,7 +250,7 @@ jobs:
       - checkout:
           name: Checkout Streamlit code
       - run: echo "Done with checkout
-      - update_version: 
+      - run: 
           name: Update streamlit version 
           command: |
             echo "Release version ${STREAMLIT_RELEASE_VERSION}"
