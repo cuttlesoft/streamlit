@@ -231,6 +231,21 @@ workflows:
       - create-tag
 
 jobs:
+  newtest:
+    docker:
+      - image: circleci/python:3.9.7
+    #     auth:
+    #       username: mydockerhub-user
+    #       password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    working_directory: ~/repo
+    steps:
+      - run: echo "This is pipeline ID << pipeline.id >>"
+      - run: echo $CIRCLE_COMPARE_URL
+
+
+########
   python-max-version: &job-template
     docker:
       - image: circleci/python:3.9.7
