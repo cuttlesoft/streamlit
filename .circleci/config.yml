@@ -249,7 +249,7 @@ jobs:
     steps:
       - checkout:
           name: Checkout Streamlit code
-      - run: echo "Done with checkout
+      - run: echo "Done with checkout"
       - run: 
           name: Update streamlit version 
           command: |
