@@ -6,6 +6,7 @@ version: 2.1
 parameters:
   release-version:
     type: string
+    default: ""
 orbs:
   slack: circleci/slack@3.4.2
 commands:
