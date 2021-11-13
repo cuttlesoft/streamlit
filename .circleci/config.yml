@@ -3,6 +3,13 @@
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
 version: 2.1
+parameters:
+  image-tag:
+    type: string
+    default: "latest"
+  # workingdir:
+  #   type: string
+  #   default: "~/main"
 orbs:
   slack: circleci/slack@3.4.2
 commands:
@@ -238,11 +245,12 @@ jobs:
     #       username: mydockerhub-user
     #       password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+      IMAGETAG: << pipeline.parameters.image-tag >>
+      # CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     working_directory: ~/repo
     steps:
-      - run: echo "This is pipeline ID << pipeline.id >>"
-      - run: echo $CIRCLE_COMPARE_URL
+      - run: echo "Image tag used was ${IMAGETAG}"
+      # - run: echo $CIRCLE_COMPARE_URL
 
 
 ########
