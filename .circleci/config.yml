@@ -188,6 +188,7 @@ commands:
 workflows:
   circleci:
     jobs:
+      - newtest
       - python-min-version: # Oldest supported Python minor version.
           filters:
             tags:
