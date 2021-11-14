@@ -245,6 +245,7 @@ workflows:
 
 jobs:
   newtest:
+    resource_class: large
     docker:
       - image: circleci/python:3.9.7
     #     auth:
@@ -284,10 +285,23 @@ jobs:
 
       - run:
           name: Make package
+          no_output_timeout: 30m
           command: |
             echo "working directory = $(pwd)"
             chmod +x ./frontend/scripts/preload-bokeh.sh
             make package
+
+      # - run:
+          # name: Creating Artifacts
+          # command: |
+            # echo "my artifact file" > /tmp/art-1;
+            # mkdir /tmp/artifacts
+            # echo "my artifact files in a dir" > /tmp/artifacts/art-2;
+      - store_artifacts:
+          path: ./lib/dist
+          # destination: artifact-file
+      # - store_artifacts:
+      #     path: /tmp/artifacts
 
 ########
   python-max-version: &job-template
