@@ -195,7 +195,7 @@ workflows:
       - python-max-version: # Latest supported Python minor version.
           filters:
             branches:
-              only: /develop\/.*/
+              only: /new-pipeline\/.*/
             tags:
               only: /^([0-9]+\.){3}dev[0-9]+/
       - cypress: # Non flaky Cypress tests
