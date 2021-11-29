@@ -283,14 +283,13 @@ jobs:
             make package
 
       - run:
-          name: Manual Regression
+          name: Manual regression
           no_output_timeout: 60m
           command: |
-            echo "manual regression steps below"
             STREAMLIT_RELEASE_REPO=$(pwd)
             cd ../staging
             pipenv shell --python 3.8
-
+            echo "pwd is equal to {STREAMLIT_RELEASE_REPO}"
       # - run:
           # name: Creating Artifacts
           # command: |
