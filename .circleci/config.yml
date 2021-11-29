@@ -187,17 +187,7 @@ workflows:
     jobs:
       - manualpipeline
       - python-min-version: # Oldest supported Python minor version.
-          filters:
-            branches:
-              only: /develop\/.*/
-            tags:
-              only: /^([0-9]+\.){3}dev[0-9]+/ # 0.56.1.dev20201129
       - python-max-version: # Latest supported Python minor version.
-          filters:
-            branches:
-              only: /new-pipeline\/.*/
-            tags:
-              only: /^([0-9]+\.){3}dev[0-9]+/
       - cypress: # Non flaky Cypress tests
           filters:
             branches:
@@ -239,7 +229,7 @@ workflows:
           filters:
             branches:
               only:
-                - develop
+                - new-pipeline
     jobs:
       - create-tag
 
