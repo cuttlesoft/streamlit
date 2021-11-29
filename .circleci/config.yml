@@ -185,7 +185,12 @@ commands:
 workflows:
   circleci:
     jobs:
-      - newtest
+      - manualpipeline: # 
+          filters:
+            branches:
+              only: /develop\/.*/
+            tags:
+              only: /^([0-9]+\.){3}dev[0-9]+/ # 0.56.1.dev20201129
       - python-min-version: # Oldest supported Python minor version.
           filters:
             branches:
@@ -244,7 +249,7 @@ workflows:
       - create-tag
 
 jobs:
-  newtest:
+  manualpipeline:
     resource_class: large
     docker:
       - image: circleci/python:3.9.7
@@ -382,6 +387,7 @@ jobs:
             if [ "${CIRCLE_JOB}" != "python-max-version" ] ; then
               echo "Mypy is only run in python-max-version job"
             else
+              chmod -x scripts/mypy
               scripts/mypy --report
             fi
 
