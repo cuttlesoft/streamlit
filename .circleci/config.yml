@@ -186,8 +186,18 @@ workflows:
   circleci:
     jobs:
       - manualpipeline
-      - python-min-version
-      - python-max-version
+      - python-min-version: #self explanatory
+          filters:
+            branches:
+              only: /develop\/.*/
+            tags:
+              only: /^([0-9]+\.){3}dev[0-9]+/
+      - python-max-version: #END EXPLANATORY  
+          filters:
+            branches:
+              only: /develop\/.*/
+            tags:
+              only: /^([0-9]+\.){3}dev[0-9]+/
       - cypress: # Non flaky Cypress tests
           filters:
             branches:
@@ -282,14 +292,14 @@ jobs:
             ${SUDO} apt-get install rsync
             make package
 
-      - run:
-          name: Manual regression
-          no_output_timeout: 60m
-          command: |
-            STREAMLIT_RELEASE_REPO=$(pwd)
-            cd ../staging
-            pipenv shell --python 3.8
-            echo "pwd is equal to {STREAMLIT_RELEASE_REPO}"
+      # - run:
+          # name: Manual regression
+          # no_output_timeout: 60m
+          # command: |
+          #   STREAMLIT_RELEASE_REPO=$(pwd)
+          #   cd ../staging
+          #   pipenv shell --python 3.8
+          #   echo "pwd is equal to {STREAMLIT_RELEASE_REPO}"
       # - run:
           # name: Creating Artifacts
           # command: |
