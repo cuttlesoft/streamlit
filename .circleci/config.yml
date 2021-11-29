@@ -489,7 +489,7 @@ jobs:
           command: |
             git config user.email "jonathan@streamlit.io"
             git config user.name "CircleCI"
-
+            chmod -x ./scripts/pypi_nightly_create_tag.py
             TAG="$(./scripts/pypi_nightly_create_tag.py)"
 
             ./scripts/update_version.py $TAG
