@@ -186,8 +186,8 @@ workflows:
   circleci:
     jobs:
       - manualpipeline
-      - python-min-version: # Oldest supported Python minor version.
-      - python-max-version: # Latest supported Python minor version.
+      - python-min-version
+      - python-max-version
       - cypress: # Non flaky Cypress tests
           filters:
             branches:
