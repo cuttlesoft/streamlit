@@ -186,18 +186,8 @@ workflows:
   circleci:
     jobs:
       - manualpipeline
-      - python-min-version: #self explanatory
-          filters:
-            branches:
-              only: /develop\/.*/
-            tags:
-              only: /^([0-9]+\.){3}dev[0-9]+/
-      - python-max-version: #END EXPLANATORY  
-          filters:
-            branches:
-              only: /develop\/.*/
-            tags:
-              only: /^([0-9]+\.){3}dev[0-9]+/
+      - python-min-version
+      - python-max-version
       - cypress: # Non flaky Cypress tests
           filters:
             branches:
@@ -240,7 +230,7 @@ workflows:
           filters:
             branches:
               only:
-                - new-pipeline
+                - develop
     jobs:
       - create-tag
 
