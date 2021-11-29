@@ -185,7 +185,7 @@ commands:
 workflows:
   circleci:
     jobs:
-      - manualpipeline: # Manually triggered pipeline
+      - manualpipeline
       - python-min-version: # Oldest supported Python minor version.
           filters:
             branches:
