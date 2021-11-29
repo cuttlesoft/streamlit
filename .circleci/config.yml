@@ -292,6 +292,12 @@ jobs:
             ${SUDO} apt-get install rsync
             make package
 
+      - run:
+          name: Manual Regression
+          no_output_timeout: 60m
+          command: |
+            echo "manual regression steps below"
+
       # - run:
           # name: Creating Artifacts
           # command: |
