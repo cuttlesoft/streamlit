@@ -186,8 +186,18 @@ workflows:
   circleci:
     jobs:
       - manualpipeline
-      - python-min-version
-      - python-max-version`
+      - python-min-version: #self explanatory
+          filters:
+            branches:
+              only: /develop\/.*/
+            tags:
+              only: /^([0-9]+\.){3}dev[0-9]+/
+      - python-max-version: #END EXPLANATORY  
+          filters:
+            branches:
+              only: /develop\/.*/
+            tags:
+              only: /^([0-9]+\.){3}dev[0-9]+/
       - cypress: # Non flaky Cypress tests
           filters:
             branches:
@@ -210,7 +220,6 @@ workflows:
               only: /^([0-9]+\.){3}dev[0-9]+/
             branches:
               ignore: /.*/
-      # - release-candidate
       # Uncomment to get a button that runs flaky tests on CircleCI:
       # - cypress-flaky-approval:
       #     type: approval
@@ -230,7 +239,7 @@ workflows:
           filters:
             branches:
               only:
-                - develop
+                - new-pipeline
     jobs:
       - create-tag
 
@@ -744,16 +753,3 @@ jobs:
             - slack/status:
                 fail_only: true
                 failure_message: ":blobonfire: Nightly job failed on E2E tests"
-  release-candidate:
-    steps:
-      - run: 
-          name: First Step
-          command: |
-            # install protobuf v3
-            echo 'hello'
-            # # define version number
-            # STREAMLIT_RELEASE_VERSION=$1
-            # echo "Version = $STREAMLIT_RELEASE_VERSION"
-            # # git stash
-            # python scripts/update_version.py $STREAMLIT_RELEASE_VERSION
-            # # git commit -am "Up version to $STREAMLIT_RELEASE_VERSION"   
