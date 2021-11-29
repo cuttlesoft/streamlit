@@ -220,7 +220,7 @@ workflows:
               only: /^([0-9]+\.){3}dev[0-9]+/
             branches:
               ignore: /.*/
-      - release-candidate
+      # - release-candidate
       # Uncomment to get a button that runs flaky tests on CircleCI:
       # - cypress-flaky-approval:
       #     type: approval
