@@ -188,7 +188,7 @@ workflows:
       - manualpipeline: # 
           filters:
             branches:
-              only: /develop\/.*/
+              only: /*\/.*/
             tags:
               only: /^([0-9]+\.){3}dev[0-9]+/ # 0.56.1.dev20201129
       - python-min-version: # Oldest supported Python minor version.
