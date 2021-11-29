@@ -185,12 +185,7 @@ commands:
 workflows:
   circleci:
     jobs:
-      - manualpipeline: # 
-          filters:
-            branches:
-              only: /*\/.*/
-            tags:
-              only: /^([0-9]+\.){3}dev[0-9]+/ # 0.56.1.dev20201129
+      - manualpipeline: # Manually triggered pipeline
       - python-min-version: # Oldest supported Python minor version.
           filters:
             branches:
