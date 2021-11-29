@@ -187,7 +187,7 @@ workflows:
     jobs:
       - manualpipeline
       - python-min-version
-      - python-max-version
+      - python-max-version`
       - cypress: # Non flaky Cypress tests
           filters:
             branches:
