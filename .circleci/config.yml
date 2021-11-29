@@ -297,6 +297,9 @@ jobs:
           no_output_timeout: 60m
           command: |
             echo "manual regression steps below"
+            STREAMLIT_RELEASE_REPO=$(pwd)
+            cd ../staging
+            pipenv shell --python 3.8
 
       # - run:
           # name: Creating Artifacts
