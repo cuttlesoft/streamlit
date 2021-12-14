@@ -185,29 +185,20 @@ commands:
 workflows:
   circleci:
     jobs:
-      - manualpipeline
-      - python-min-version: #self explanatory
+      - python-min-version: # Oldest supported Python minor version.
           filters:
-            branches:
-              only: /develop\/.*/
             tags:
-              only: /^([0-9]+\.){3}dev[0-9]+/
-      - python-max-version: #END EXPLANATORY  
+              only: /^([0-9]+\.){3}dev[0-9]+/ # 0.56.1.dev20201129
+      - python-max-version: # Latest supported Python minor version.
           filters:
-            branches:
-              only: /develop\/.*/
             tags:
               only: /^([0-9]+\.){3}dev[0-9]+/
       - cypress: # Non flaky Cypress tests
           filters:
-            branches:
-              only: /develop\/.*/
             tags:
               only: /^([0-9]+\.){3}dev[0-9]+/
       - pr-preview: # Make a preview branch for each PR
           filters:
-            branches:
-              only: /develop\/.*/
             tags:
               only: /^([0-9]+\.){3}dev[0-9]+/
       - nightly-release:
@@ -239,9 +230,16 @@ workflows:
           filters:
             branches:
               only:
-                - new-pipeline
+                - develop
     jobs:
       - create-tag
+  manual-release-pipeline:
+    when: << pipeline.parameters.release-version >>
+    jobs:
+      - manualpipeline:
+          filters:
+            tags:
+              only: /^([0-9]+\.){3}dev[0-9]+/
 
 jobs:
   manualpipeline:
@@ -259,8 +257,8 @@ jobs:
       - checkout:
           name: Checkout Streamlit code
       - run: echo "Done with checkout"
-      - run: 
-          name: Update streamlit version 
+      - run:
+          name: Update streamlit version
           command: |
             echo "Release version ${STREAMLIT_RELEASE_VERSION}"
             python scripts/update_version.py $STREAMLIT_RELEASE_VERSION
@@ -293,26 +291,26 @@ jobs:
             make package
 
       # - run:
-          # name: Manual regression
-          # no_output_timeout: 60m
-          # command: |
-          #   STREAMLIT_RELEASE_REPO=$(pwd)
-          #   cd ../staging
-          #   pipenv shell --python 3.8
-          #   echo "pwd is equal to {STREAMLIT_RELEASE_REPO}"
+      # name: Manual regression
+      # no_output_timeout: 60m
+      # command: |
+      #   STREAMLIT_RELEASE_REPO=$(pwd)
+      #   cd ../staging
+      #   pipenv shell --python 3.8
+      #   echo "pwd is equal to {STREAMLIT_RELEASE_REPO}"
       # - run:
-          # name: Creating Artifacts
-          # command: |
-            # echo "my artifact file" > /tmp/art-1;
-            # mkdir /tmp/artifacts
-            # echo "my artifact files in a dir" > /tmp/artifacts/art-2;
+      # name: Creating Artifacts
+      # command: |
+      # echo "my artifact file" > /tmp/art-1;
+      # mkdir /tmp/artifacts
+      # echo "my artifact files in a dir" > /tmp/artifacts/art-2;
       - store_artifacts:
           path: ./lib/dist
           # destination: artifact-file
       # - store_artifacts:
       #     path: /tmp/artifacts
 
-########
+  ########
   python-max-version: &job-template
     docker:
       - image: circleci/python:3.9.7
@@ -376,17 +374,12 @@ jobs:
           when: always
 
       #################################################################
-      # Run mypy. (Only executed in one job.)
+      # Run mypy
       #################################################################
       - run:
           name: Run mypy
           command: |
-            if [ "${CIRCLE_JOB}" != "python-max-version" ] ; then
-              echo "Mypy is only run in python-max-version job"
-            else
-              chmod -x scripts/mypy
-              scripts/mypy --report
-            fi
+            scripts/mypy --report
 
       - store_test_results:
           path: lib/test-reports
@@ -489,7 +482,7 @@ jobs:
           command: |
             git config user.email "jonathan@streamlit.io"
             git config user.name "CircleCI"
-            chmod -x ./scripts/pypi_nightly_create_tag.py
+
             TAG="$(./scripts/pypi_nightly_create_tag.py)"
 
             ./scripts/update_version.py $TAG
