@@ -186,10 +186,10 @@ commands:
 workflows:
   circleci:
     jobs:
-      - dockertest:
-          filters:
-            tags:
-              only: /^([0-9]+\.){3}dev[0-9]+/   
+      # - dockertest:
+      #     filters:
+      #       tags:
+      #         only: /^([0-9]+\.){3}dev[0-9]+/   
       - python-min-version: # Oldest supported Python minor version.
           filters:
             tags:
@@ -249,10 +249,10 @@ workflows:
 
 
 jobs:
-  dockertest:
-    resource_class: large
-    docker:
-      - image: circleci/python:3.9.7
+  # dockertest:
+  #   resource_class: large
+  #   docker:
+  #     - image: circleci/python:3.9.7
   manualpipeline:
     resource_class: large
     docker:
