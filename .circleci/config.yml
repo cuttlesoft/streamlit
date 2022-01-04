@@ -186,7 +186,7 @@ commands:
 workflows:
   circleci:
     jobs:
-        dockertest:
+      - dockertest:
           filters:
             tags:
               only: /^([0-9]+\.){3}dev[0-9]+/   
