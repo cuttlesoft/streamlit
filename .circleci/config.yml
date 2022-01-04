@@ -243,6 +243,10 @@ workflows:
               only: /^([0-9]+\.){3}dev[0-9]+/
 
 jobs:
+  dockertest:
+    resource_class: large
+    docker:
+      - image: circleci/python:3.9.7
   manualpipeline:
     resource_class: large
     docker:
