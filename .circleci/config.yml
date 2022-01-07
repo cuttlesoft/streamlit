@@ -186,10 +186,10 @@ commands:
 workflows:
   circleci:
     jobs:
-      # - dockertest:
-      #     filters:
-      #       tags:
-      #         only: /^([0-9]+\.){3}dev[0-9]+/   
+      - dockertest:
+          filters:
+            tags:
+              only: /^([0-9]+\.){3}dev[0-9]+/   
       - python-min-version: # Oldest supported Python minor version.
           filters:
             tags:
@@ -249,10 +249,17 @@ workflows:
 
 
 jobs:
-  # dockertest:
-  #   resource_class: large
-  #   docker:
-  #     - image: circleci/python:3.9.7
+  dockertest:
+    resource_class: large
+    docker:
+      - image: circleci/python:3.9.7
+    #     auth:
+    #       username: mydockerhub-user
+    #       password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    environment:
+      STREAMLIT_RELEASE_VERSION: << pipeline.parameters.release-version >>
+      # CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    working_directory: ~/repo
   manualpipeline:
     resource_class: large
     docker:
