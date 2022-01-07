@@ -260,6 +260,8 @@ jobs:
       STREAMLIT_RELEASE_VERSION: << pipeline.parameters.release-version >>
       # CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     working_directory: ~/repo
+    steps:
+     - run: echo "made new docker container"
   manualpipeline:
     resource_class: large
     docker:
