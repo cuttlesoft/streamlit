@@ -246,7 +246,7 @@ workflows:
             tags:
               only: /^([0-9]+\.){3}dev[0-9]+/
 
-  dockertest:
+  dockertest:                     #dockertest workflow to host the manual regression steps
     when: << pipeline.parameters.docker-test >>
     jobs:
      - dockertest:
