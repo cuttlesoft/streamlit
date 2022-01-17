@@ -7,7 +7,7 @@ parameters:
   release-version:
     type: string
     default: ""
-  docker-test:
+  docker-test:       # docker-test parameter here
     type: string
     default: ""
 orbs:
