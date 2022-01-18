@@ -273,13 +273,18 @@ jobs:
         name: Prerequisites
         command: |
           STREAMLIT_RELEASE_REPO=$(pwd)
-     - run: 
-        name: Create a new environment
+        #  - run:                                                             errors existibng in create new environment
+        #     name: Create a new environment
+        #     command: |
+        #       cd ../
+        #       mkdir staging
+        #       cd staging
+        #       pipenv install --system --deploy --ignore-pipfile  
+     -  run: 
+        name: Check streamlit version
         command: |
-          cd ../
-          mkdir staging
-          cd staging
-          pipenv install --system --deploy --ignore-pipfile  
+          streamlit version
+
   manualpipeline:
     resource_class: large
     docker:
