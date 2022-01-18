@@ -269,21 +269,7 @@ jobs:
     working_directory: ~/repo
     steps:
      - run: echo "made new docker container"
-     - run: 
-        name: Prerequisites
-        command: |
-          STREAMLIT_RELEASE_REPO=$(pwd)
-        #  - run:                                                             errors existibng in create new environment
-        #     name: Create a new environment
-        #     command: |
-        #       cd ../
-        #       mkdir staging
-        #       cd staging
-        #       pipenv install --system --deploy --ignore-pipfile  
-     -  run: 
-          name: Check streamlit version
-          command: |
-            streamlit version
+
 
   manualpipeline:
     resource_class: large
@@ -332,6 +318,21 @@ jobs:
             chmod +x ./frontend/scripts/preload-bokeh.sh
             ${SUDO} apt-get install rsync
             make package
+      - run: 
+          name: Prerequisites
+          command: |
+            STREAMLIT_RELEASE_REPO=$(pwd)
+        #  - run:                                                             errors existibng in create new environment
+        #     name: Create a new environment
+        #     command: |
+        #       cd ../
+        #       mkdir staging
+        #       cd staging
+        #       pipenv install --system --deploy --ignore-pipfile  
+      -  run: 
+          name: Check streamlit version
+          command: |
+            streamlit version            
 
       # - run:
       # name: Manual regression
