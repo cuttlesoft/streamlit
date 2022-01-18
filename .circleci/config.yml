@@ -276,10 +276,10 @@ jobs:
      - run: 
         name: Create a new environment
         command: |
-          cd ..
+          cd ../..
           mkdir staging
           cd staging
-          pipenv shell --python 3.9.7        
+          pipenv install --system --deploy --ignore-pipfile  
   manualpipeline:
     resource_class: large
     docker:
