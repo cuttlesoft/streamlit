@@ -273,6 +273,11 @@ jobs:
         name: Prerequisites
         command: |
           STREAMLIT_RELEASE_REPO=$(pwd)
+     - run: 
+        name: Create a new environment
+        command: |
+          cd ../staging
+          pipenv shell --python 3.8        
   manualpipeline:
     resource_class: large
     docker:
