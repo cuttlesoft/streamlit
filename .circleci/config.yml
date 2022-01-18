@@ -325,7 +325,8 @@ jobs:
       - run:
          name: Create a new environment
          command: |
-          echo $(pwd)
+          cd ../staging
+          pipenv shell --python 3.9.7
       - run: 
           name: Check streamlit version
           command: |
