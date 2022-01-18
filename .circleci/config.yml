@@ -331,7 +331,15 @@ jobs:
           name: Check streamlit version
           command: |
             streamlit version            
-
+      - run: 
+          name: Remove credentials
+          command: |
+           rm ~/.streamlit/credentials.toml   
+      - run: 
+          name: Cleanup environment
+          command: |
+            rm .streamlit/config.toml
+            streamlit cache clear
       # - run:
       # name: Manual regression
       # no_output_timeout: 60m
