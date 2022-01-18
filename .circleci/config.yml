@@ -281,9 +281,9 @@ jobs:
         #       cd staging
         #       pipenv install --system --deploy --ignore-pipfile  
      -  run: 
-        name: Check streamlit version
-        command: |
-          streamlit version
+          name: Check streamlit version
+          command: |
+            streamlit version
 
   manualpipeline:
     resource_class: large
