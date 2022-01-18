@@ -322,14 +322,12 @@ jobs:
           name: Prerequisites
           command: |
             STREAMLIT_RELEASE_REPO=$(pwd)
-        #  - run:                                                             errors existibng in create new environment
-        #     name: Create a new environment
-        #     command: |
-        #       cd ../
-        #       mkdir staging
-        #       cd staging
-        #       pipenv install --system --deploy --ignore-pipfile  
-      -  run: 
+      - run:
+         name: Create a new environment
+         command: |
+          cd ../../staging
+          pipenv shell --python 3.9.7
+      - run: 
           name: Check streamlit version
           command: |
             streamlit version            
