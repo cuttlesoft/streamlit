@@ -274,7 +274,7 @@ jobs:
         command: |
          STREAMLIT_RELEASE_REPO=$(pwd)
          echo $(pwd)
-         cd ../../
+         cd ../
          ls
          chmod +x ./circleci
          mkdir staging
