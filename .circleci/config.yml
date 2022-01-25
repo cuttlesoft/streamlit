@@ -342,9 +342,8 @@ jobs:
       - run: 
           name: Cleanup environment
           command: |
-# ^C/sigint not working so far
-            rm .streamlit/config.toml
-            streamlit cache clear
+           rm .streamlit/config.toml
+           streamlit cache clear
       - run: 
           name: Test streamlit activate
           command: |
