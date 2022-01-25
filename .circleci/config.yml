@@ -276,6 +276,7 @@ jobs:
          echo $(pwd)
          cd ../../
          ls
+         chmod +x ./home/circleci
          mkdir staging
          cd staging
          pipenv --python 3.9.7
