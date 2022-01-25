@@ -274,7 +274,6 @@ jobs:
         command: |
          STREAMLIT_RELEASE_REPO=$(pwd)
          echo $(pwd)
-         cd ../
          ls
          chmod +x ./circleci
          mkdir ./staging
@@ -340,12 +339,12 @@ jobs:
       - run: 
           name: Remove credentials
           command: |
-           SIGTERM
+           ^C
            rm ~/.streamlit/credentials.toml   
       - run: 
           name: Cleanup environment
           command: |
-            SIGTERM
+            ^C
             rm .streamlit/config.toml
             streamlit cache clear
       # - run:
