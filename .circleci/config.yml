@@ -273,7 +273,9 @@ jobs:
         name: Create a new environment
         command: |
          STREAMLIT_RELEASE_REPO=$(pwd)
-         cd ../staging
+         echo ls
+         cd ../../staging
+         echo ls
          pipenv --python 3.9.7
 
   manualpipeline:
