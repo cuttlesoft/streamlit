@@ -277,8 +277,8 @@ jobs:
          cd ../
          ls
          chmod +x ./circleci
-         mkdir staging
-         cd staging
+         mkdir ./staging
+         cd ./staging
          pipenv --python 3.9.7
 
   manualpipeline:
