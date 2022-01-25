@@ -325,13 +325,13 @@ jobs:
       - run:
          name: Create a new environment
          command: |
-          ls
           cd ..
-          ls
           mkdir staging
+          ls
           cd staging
+          ls
           echo $(pwd)
-          pipenv shell --python 3.9.7
+          pipenv --python 3.9.7
       - run: 
           name: Check streamlit version
           command: |
