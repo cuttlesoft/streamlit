@@ -275,7 +275,8 @@ jobs:
          STREAMLIT_RELEASE_REPO=$(pwd)
          echo $(pwd)
          ls
-         chmod +x ./circleci
+         cd ..
+         chmod +x ./
          mkdir ./staging
          cd ./staging
          pipenv --python 3.9.7
