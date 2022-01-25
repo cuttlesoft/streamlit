@@ -325,7 +325,9 @@ jobs:
       - run:
          name: Create a new environment
          command: |
+          ls
           cd ..
+          ls
           mkdir staging
           cd staging
           echo $(pwd)
@@ -337,10 +339,12 @@ jobs:
       - run: 
           name: Remove credentials
           command: |
+           SIGTERM
            rm ~/.streamlit/credentials.toml   
       - run: 
           name: Cleanup environment
           command: |
+            SIGTERM
             rm .streamlit/config.toml
             streamlit cache clear
       # - run:
