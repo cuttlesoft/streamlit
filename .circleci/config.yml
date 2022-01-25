@@ -269,7 +269,12 @@ jobs:
     working_directory: ~/repo
     steps:
      - run: echo "made new docker container"
-
+     - run:
+        name: Create a new environment
+        command: |
+         STREAMLIT_RELEASE_REPO=$(pwd)
+         cd ../staging
+         pipenv --python 3.9.7
 
   manualpipeline:
     resource_class: large
@@ -322,16 +327,7 @@ jobs:
           name: Prerequisites
           command: |
             STREAMLIT_RELEASE_REPO=$(pwd)
-      - run:
-         name: Create a new environment
-         command: |
-          cd ..
-          mkdir staging
-          ls
-          cd staging
-          ls
-          echo $(pwd)
-      # pipenv --python 3.9.7
+
       - run: 
           name: Check streamlit version
           command: |
