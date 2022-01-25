@@ -273,8 +273,6 @@ jobs:
         name: Create a new environment
         command: |
          STREAMLIT_RELEASE_REPO=$(pwd)
-         echo $(pwd)
-         ls
          cd ..
          chmod +x ./
          mkdir ./staging
@@ -340,14 +338,20 @@ jobs:
       - run: 
           name: Remove credentials
           command: |
-           ^C
            rm ~/.streamlit/credentials.toml   
       - run: 
           name: Cleanup environment
           command: |
-            ^C
+# ^C/sigint not working so far
             rm .streamlit/config.toml
             streamlit cache clear
+      - run: 
+          name: Test streamlit activate
+          command: |
+           rm ~/.streamlit/credentials.toml   
+           streamlit activate
+           zeid@streamlit.io
+
       # - run:
       # name: Manual regression
       # no_output_timeout: 60m
