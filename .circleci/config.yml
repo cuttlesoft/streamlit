@@ -278,6 +278,10 @@ jobs:
          mkdir ./staging
          cd ./staging
          pipenv --python 3.9.7
+     - run:
+        name: Install in new environment
+        command: |
+         pip install ./lib/dist/streamlit-$(STREAMLIT_RELEASE_VERSION)-py2.py3-none-any.whl
 
   manualpipeline:
     resource_class: large
