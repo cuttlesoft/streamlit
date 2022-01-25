@@ -331,7 +331,7 @@ jobs:
           cd staging
           ls
           echo $(pwd)
-          pipenv --python 3.9.7
+      # pipenv --python 3.9.7
       - run: 
           name: Check streamlit version
           command: |
