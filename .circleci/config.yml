@@ -208,6 +208,7 @@ workflows:
               only: /^([0-9]+\.){3}dev[0-9]+/
             branches:
               ignore: /.*/
+
       # Uncomment to get a button that runs flaky tests on CircleCI:
       # - cypress-flaky-approval:
       #     type: approval
@@ -232,13 +233,25 @@ workflows:
       - create-tag
   release-pipeline:
     jobs:
-      - create-release:
+      - build-release:
+          requires:
+            - python-min-version
+            - python-max-version
+            - cypress
           filters:
             branches:
               only: /^release\/([0-9]+\.){2}([0-9]+)/
+      - deploy-release:
+          requires:
+            - build-release
+          filters:
+            tags:
+              only: /^([0-9]+\.){2}([0-9]+)/
+            branches:
+              ignore: /.*/
 
 jobs:
-  create-release:
+  build-release:
     resource_class: large
     docker:
       - image: circleci/python:3.9.7
@@ -261,6 +274,7 @@ jobs:
             git config user.name "Streamlit Bot"
 
             git commit -am "Up version to $STREAMLIT_RELEASE_VERSION [skip ci]" && git push origin $CIRCLE_BRANCH || echo "No changes to commit"
+
       - update-submodules
       - pre-cache
       - restore-from-cache
@@ -289,8 +303,76 @@ jobs:
             ${SUDO} apt-get install rsync
             make package
 
+      - run:
+          name: Run CLI regression tests with full build
+          command: |
+            make cli-regression-tests
+
       - store_artifacts:
           path: ./lib/dist
+
+      # Save workspace for deploy-release job
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./lib/dist
+
+  deploy-release:
+    resource_class: large
+    docker:
+      - image: circleci/python:3.9.7
+    working_directory: ~/repo
+    steps:
+      # Reuse the workspace from build-release to retrieve the build artifacts
+      - attach_workspace:
+          at: .
+
+      - checkout:
+          name: Checkout Streamlit code
+
+      - update-submodules
+
+      - pre-cache
+      - restore-from-cache
+      - pre-make
+      - make-init
+
+      - run:
+          name: Ensure that version tag matches branch version
+          command: |
+            if [ "$(echo $CIRCLE_BRANCH | tr -d "release/")" != "$CIRCLE_TAG" ]
+            then
+              echo "ERROR: Version number from tag does not match the version number from the branch name."
+              exit 1
+            fi
+      - run:
+          name: Ensure that version tag matches the build version
+          command: |
+            cd lib
+            python setup.py verify
+      - run:
+          name: init .pypirc to add credentials
+          command: |
+            cd lib
+            echo -e "[pypi]" >> ~/.pypirc
+            echo -e "username = streamlit" >> ~/.pypirc
+            echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc
+      - run:
+          name: Distribute package
+          command: |
+            echo "Distributing..."
+            make distribute
+      - run:
+          name: Mark GH release as official, upload artifacts
+          command: |
+            echo "TODO: Updating GH release..."
+      - run:
+          name: Merge branch
+          command: |
+            echo "TODO: Merging branch..."
+      # - slack/status:
+      #     fail_only: true
+      #     failure_message: ":blobonfire: Deploy job failed to release"
 
   python-max-version: &job-template
     docker:
@@ -385,6 +467,16 @@ jobs:
             - ~/.nvm
             - ~/.cache
             - frontend/node_modules
+
+      - run:
+          name: Build and use full build
+          command: |
+            make package
+
+      - run:
+          name: Run CLI regression tests with full build
+          command: |
+            make cli-regression-tests
 
       - when:
           condition: <<pipeline.git.tag>>
