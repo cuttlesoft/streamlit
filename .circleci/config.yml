@@ -208,7 +208,6 @@ workflows:
               only: /^([0-9]+\.){3}dev[0-9]+/
             branches:
               ignore: /.*/
-      - upgrade-version:
 
       # Uncomment to get a button that runs flaky tests on CircleCI:
       # - cypress-flaky-approval:
@@ -234,20 +233,22 @@ workflows:
       - create-tag
   release-pipeline:
     jobs:
-      - build-release:
-          requires:
-            - python-min-version
-            - python-max-version
-            - cypress
-          filters:
-            branches:
-              only: /^release\/([0-9]+\.){2}([0-9]+)/
+      # - build-release:
+      #     requires:
+      #       - python-min-version
+      #       - python-max-version
+      #       - cypress
+      #     filters:
+      #       branches:
+      #         only: /^release\/([0-9]+\.){2}([0-9]+)/
       - deploy-release:
-          requires:
-            - build-release
+          # requires:
+          #   - build-release
           filters:
             tags:
               only: /^([0-9]+\.){2}([0-9]+)/
+            branches:
+              ignore: /.*/
 
 jobs:
   build-release:
@@ -318,35 +319,41 @@ jobs:
     working_directory: ~/repo
     steps:
       # Reuse the workspace from build-release to retrieve the build artifacts
-      - attach_workspace:
-          at: .
+      # - attach_workspace:
+      #     at: .
 
-      - checkout:
-          name: Checkout Streamlit code
+      # - checkout:
+      #     name: Checkout Streamlit code
 
-      - update-submodules
+      # - update-submodules
 
-      - pre-cache
-      - restore-from-cache
-      - pre-make
-      - make-init
+      # - pre-cache
+      # - restore-from-cache
+      # - pre-make
+      # - make-init
 
       - run:
           name: Ensure that version tag matches branch version
           command: |
-            if [ $(echo $CIRCLE_BRANCH | tr -d "release/") != $CIRCLE_TAG ]
+            if [ "$(echo $CIRCLE_BRANCH | tr -d "release/")" != "$CIRCLE_TAG" ]
             then
               echo "ERROR: Version number from tag does not match the version number from the branch name."
-              return 1
+              exit 1
             fi
       - run:
           name: Ensure that version tag matches the build version
           command: |
             cd lib
             python setup.py verify
+      # Password added to circleci environment
+      # https://ui.circleci.com/settings/project/github/streamlit/streamlit/environment-variables
       - run:
-          name: Install twine
-          command: pip install twine
+          name: init .pypirc
+          command: |
+            cd lib
+            echo -e "[pypi]" >> ~/.pypirc
+            echo -e "username = streamlit" >> ~/.pypirc
+            echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc
       - run:
           name: Distribute package
           command: |
