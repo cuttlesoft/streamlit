@@ -348,8 +348,8 @@ jobs:
       - image: circleci/python:3.9.7
     working_directory: ~/repo
     steps:
-      # - checkout:
-      #     name: Checkout Streamlit code
+      - checkout:
+          name: Checkout Streamlit code
 
       # - configure-build-env
 
@@ -405,28 +405,16 @@ jobs:
       #       make distribute
 
       - run:
-          name: Install and authenticate with GitHub CLI
+          name: Create GitHub Release and merge PR
           command: |
+            sudo apt-get install jq
             /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-            echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/circleci/.profile
+            eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
             brew install gh
-            echo $GITHUB_TOKEN > ghtoken.txt
-            gh auth login --with-token < ghtoken.txt
 
-      - run:
-          name: Create GitHub Release and upload artifacts (ADD ME? gh release upload $CIRCLE_TAG dist/lib/*)
-          command: |
+            export GH_REPO=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
             gh release create $CIRCLE_TAG -n "" -t $CIRCLE_TAG
-
-      - run:
-          name: Lookup PR Number from GitHub commit
-          command: |
-            apt-get install jq
-            echo "export PR_NUMBER=$(gh api repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/commits/${CIRCLE_SHA1}/pulls | jq '.[0] | .number')" >> $BASH_ENV
-
-      - run:
-          name: Merge PR
-          command: gh pr merge $PR_NUMBER --auto
+            gh pr merge $(gh api repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/commits/${CIRCLE_SHA1}/pulls | jq '.[0] | .number') -m
 
       # - slack/status:
       #     success_message: ":rocket: Version ${STREAMLIT_RELEASE_SEMVER} was successful!"
