@@ -405,14 +405,29 @@ jobs:
       #       make distribute
 
       - run:
-          name: Mark GH release as official, upload artifacts
+          name: Install and authenticate with GitHub CLI
           command: |
-            echo "TODO: Updating GH release..."
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/circleci/.profile
+            brew install gh
+            echo $GITHUB_TOKEN > ghtoken.txt
+            gh auth login --with-token < ghtoken.txt
 
       - run:
-          name: Merge branch
+          name: Create GitHub Release and upload artifacts
           command: |
-            echo "TODO: Merging branch..."
+            gh release create $CIRCLE_TAG -n "" -t $CIRCLE_TAG
+            gh release upload $CIRCLE_TAG dist/lib/*
+
+      - run:
+          name: Lookup PR Number from GitHub commit
+          command: |
+            apt-get install jq
+            echo "export PR_NUMBER=$(gh api repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/commits/${CIRCLE_SHA1}/pulls | jq '.[0] | .number')" >> $BASH_ENV
+
+      - run:
+          name: Merge PR
+          command: gh pr merge $PR_NUMBER --auto
 
       # - slack/status:
       #     success_message: ":rocket: Version ${STREAMLIT_RELEASE_SEMVER} was successful!"
