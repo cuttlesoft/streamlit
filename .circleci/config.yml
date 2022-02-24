@@ -348,22 +348,22 @@ jobs:
       - image: circleci/python:3.9.7
     working_directory: ~/repo
     steps:
-      - checkout:
-          name: Checkout Streamlit code
+      # - checkout:
+      #     name: Checkout Streamlit code
 
-      - configure-build-env
+      # - configure-build-env
 
-      - run:
-          name: Set release version from tag name
-          command: echo 'export STREAMLIT_RELEASE_VERSION=$(echo $CIRCLE_TAG)' >> $BASH_ENV
+      # - run:
+      #     name: Set release version from tag name
+      #     command: echo 'export STREAMLIT_RELEASE_VERSION=$(echo $CIRCLE_TAG)' >> $BASH_ENV
 
-      - run:
-          name: Update version
-          command: python scripts/update_version.py $STREAMLIT_RELEASE_VERSION
+      # - run:
+      #     name: Update version
+      #     command: python scripts/update_version.py $STREAMLIT_RELEASE_VERSION
 
-      - run:
-          name: Output STREAMLIT_RELEASE_VERSION
-          command: echo -e "$STREAMLIT_RELEASE_VERSION"
+      # - run:
+      #     name: Output STREAMLIT_RELEASE_VERSION
+      #     command: echo -e "$STREAMLIT_RELEASE_VERSION"
 
       # - run:
       #     name: Commit version updates
@@ -383,21 +383,21 @@ jobs:
       #       echo -e "username = streamlit" >> ~/.pypirc
       #       echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc
 
-      - run:
-          name: Make package
-          no_output_timeout: 2h
-          command: |
-            echo "working directory = $(pwd)"
-            chmod +x ./frontend/scripts/preload-bokeh.sh
-            ${SUDO} apt-get install rsync
-            make package
+      # - run:
+      #     name: Make package
+      #     no_output_timeout: 2h
+      #     command: |
+      #       echo "working directory = $(pwd)"
+      #       chmod +x ./frontend/scripts/preload-bokeh.sh
+      #       ${SUDO} apt-get install rsync
+      #       make package
 
-      - run:
-          name: Run CLI regression tests
-          command: make cli-regression-tests
+      # - run:
+      #     name: Run CLI regression tests
+      #     command: make cli-regression-tests
 
-      - store_artifacts:
-          path: ./lib/dist
+      # - store_artifacts:
+      #     path: ./lib/dist
 
       # - run:
       #     name: upload to pypi
@@ -414,10 +414,9 @@ jobs:
             gh auth login --with-token < ghtoken.txt
 
       - run:
-          name: Create GitHub Release and upload artifacts
+          name: Create GitHub Release and upload artifacts (ADD ME? gh release upload $CIRCLE_TAG dist/lib/*)
           command: |
             gh release create $CIRCLE_TAG -n "" -t $CIRCLE_TAG
-            gh release upload $CIRCLE_TAG dist/lib/*
 
       - run:
           name: Lookup PR Number from GitHub commit
