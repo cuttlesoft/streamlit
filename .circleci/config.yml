@@ -318,23 +318,23 @@ jobs:
             echo 'export STREAMLIT_RELEASE_VERSION=$(echo $STREAMLIT_RELEASE_SEMVER | sed s/\-rc\./rc/)' >> $BASH_ENV
             python scripts/update_version.py $STREAMLIT_RELEASE_SEMVER
 
-      - run:
-          name: Commit version updates
-          command: |
-            git config user.email "core+streamlitbot-github@streamlit.io"
-            git config user.name "Streamlit Bot"
+      # - run:
+      #     name: Commit version updates
+      #     command: |
+      #       git config user.email "core+streamlitbot-github@streamlit.io"
+      #       git config user.name "Streamlit Bot"
 
-            git commit -am "Up version to $STREAMLIT_RELEASE_VERSION [skip ci]" && git push origin $CIRCLE_BRANCH || echo "No changes to commit"
+      #       git commit -am "Up version to $STREAMLIT_RELEASE_VERSION [skip ci]" && git push origin $CIRCLE_BRANCH || echo "No changes to commit"
 
       # Password added to circleci environment
       # https://ui.circleci.com/settings/project/github/streamlit/streamlit/environment-variables
-      - run:
-          name: init .pypirc
-          command: |
-            cd lib
-            echo -e "[pypi]" >> ~/.pypirc
-            echo -e "username = $PYPI_USERNAME" >> ~/.pypirc
-            echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc
+      # - run:
+      # name: init .pypirc
+      # command: |
+      #   cd lib
+      #   echo -e "[pypi]" >> ~/.pypirc
+      #   echo -e "username = $PYPI_USERNAME" >> ~/.pypirc
+      #   echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc
 
       - build-package
 
@@ -345,14 +345,14 @@ jobs:
       - store_artifacts:
           path: ./lib/dist
 
-      - run:
-          name: Upload to pypi
-          command: |
-            make distribute
+      # - run:
+      #     name: Upload to pypi
+      #     command: |
+      #       make distribute
 
-      - slack/status:
-          success_message: ":rocket: RC version ${STREAMLIT_RELEASE_SEMVER} was successful!"
-          failure_message: ":blobonfire: RC version ${STREAMLIT_RELEASE_SEMVER} failed to release"
+      # - slack/status:
+      #     success_message: ":rocket: RC version ${STREAMLIT_RELEASE_SEMVER} was successful!"
+      #     failure_message: ":blobonfire: RC version ${STREAMLIT_RELEASE_SEMVER} failed to release"
 
   build-deploy-release:
     resource_class: large
